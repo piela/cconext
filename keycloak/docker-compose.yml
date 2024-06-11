@@ -1,0 +1,43 @@
+version: '3'
+
+# References
+# # https://stackoverflow.com/a/60554189/5424025
+
+services:
+  mysql:
+    image: docker.io/mariadb:10
+    environment:
+      MARIADB_DATABASE: dbkc
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_PASSWORD: admin
+      MARIADB_USER: admin
+    volumes:
+      - my-datavolume:/var/lib/mysql
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0
+    environment:
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_PORT: 8080
+      KC_HOSTNAME_STRICT_BACKCHANNEL: "true"
+      KC_DB: mariadb
+      KC_DB_URL: jdbc:mariadb://mysql:3306/dbkc?characterEncoding=UTF-8
+      KC_DB_USERNAME: admin
+      KC_DB_PASSWORD: admin
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HEALTH_ENABLED: "true"
+      KC_LOG_LEVEL: info
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/health/ready" ]
+      interval: 15s
+      timeout: 2s
+      retries: 15
+    command: start-dev
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql
+
+volumes:
+  my-datavolume:
