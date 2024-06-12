@@ -1,0 +1,6 @@
+<configuration name="switch.conf" description="core configuration">
+  <settings>
+    <!-- Other settings -->
+    <param name="odbc-dsn" value="dsn=FreeSWITCH"/>
+  </settings>
+</configuration>

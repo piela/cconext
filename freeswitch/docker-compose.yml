@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  freeswitch:
+    image: freeswitch-odbc:latest
+    container_name: freeswitch
+    network_mode: "host"
+    environment:
+      - ODBCINI=/etc/odbc.ini
+      - ODBCSYSINI=/etc
+    ports:
+      - "5060:5060/udp"
+      - "5061:5061/tcp"
+      - "5080:5080/udp"
+      - "5081:5081/tcp"
+      - "5066:5066/tcp"   # WebRTC SIP signaling
+      - "7443:7443/tcp"   # WebRTC secure SIP signaling
+      - "64535-65535/udp" # RTP media ports
+    volumes:
+      - ./odbc.ini:/etc/odbc.ini
+      - ./odbcinst.ini:/etc/odbcinst.ini
+      - ./modules.conf.xml:/usr/local/freeswitch/conf/autoload_configs/modules.conf.xml
+      - ./switch.conf.xml:/usr/local/freeswitch/conf/autoload_configs/switch.conf.xml
+    depends_on:
+      - mariadb
+    entrypoint: ["/docker-entrypoint.sh", "freeswitch"]    
+
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: freeswitch
+      MYSQL_USER: y0u_R_3
+      MYSQL_PASSWORD: y0u_R_switch!
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+volumes:
+  mariadb_data:

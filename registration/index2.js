@@ -78,10 +78,10 @@ async function setPassword(realmName, userId, password) {
 
 // Przykład użycia
 const newUser = {
-  username: 'nowy.uzytkownik2',
+  username: 'nowy.uzytwwwkownik2',
   firstName: 'Jan',
   lastName: 'Kowalski',
-  email: 'jan.kowalski2@example.com',
+  email: 'jan.kowalwwwwski2@example.com',
   
   enabled: true,
 };

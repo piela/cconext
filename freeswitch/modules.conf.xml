@@ -1,0 +1,6 @@
+<configuration name="modules.conf" description="Modules">
+  <modules>
+    <!-- Other module configurations -->
+    <load module="mod_odbc"/>
+  </modules>
+</configuration>
